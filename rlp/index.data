@@ -58,7 +58,7 @@ uniform vec2 zoom;
 
 void main()
 {
-  float shade = 1. - smoothstep(length(normal/zoom.yx), 0.0, .1) ;
+  float shade = 1. - smoothstep(length(normal), 0.0, .3) ;
   if (shade == 0.) return;
   vec4 cshade = vec4(shade);
   vec4 r = resolution;
@@ -87,11 +87,16 @@ uniform vec2 screen;
 
 void main(void)
 {
+    // TODO: make this uniform.
+    float thick = 0.09;
     vc = vec4(normalize(vertexColor));
-    normal = vec2(0);
-    normal = -vertexPosition.z * normalize(vertexNormal.yx * zoom * vec2(-1, 1));
+    vec2 tg = vertexNormal.xy;
     vec2 position = vertexPosition.xy;
-      position += normal * 0.05 * (1. - min(zoom.xy*.1, 20000.0));
+
+    normal = -vertexPosition.z * normalize(tg.yx * zoom * vec2(-1, 1));
+    vec2 dif = normal * thick/2.;
+    position -= dif * (min(zoom * 0.1, 20000.0));
+
     vec2 size = resolution.zw;
 
     //Don't know why, but this value works...

@@ -190,7 +190,7 @@ Module['FS_createPath']("/", "shaders", true, true);
     }
 
     }
-    loadPackage({"files": [{"filename": "/shaders/grid.fs", "start": 0, "end": 1616}, {"filename": "/shaders/line.fs", "start": 1616, "end": 2151}, {"filename": "/shaders/line.vs", "start": 2151, "end": 3209}], "remote_package_size": 3209});
+    loadPackage({"files": [{"filename": "/shaders/grid.fs", "start": 0, "end": 1616}, {"filename": "/shaders/line.fs", "start": 1616, "end": 2143}, {"filename": "/shaders/line.vs", "start": 2143, "end": 3275}], "remote_package_size": 3275});
 
   })();
 
