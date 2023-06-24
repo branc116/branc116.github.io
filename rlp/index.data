@@ -49,12 +49,12 @@ void main(void) {
 #version 100
 precision mediump float;
 
-varying vec4 vc;
 varying vec2 normal;
 
 uniform vec2 screen;
 uniform vec4 resolution;
 uniform vec2 zoom;
+uniform vec3 color;
 
 void main()
 {
@@ -66,8 +66,9 @@ void main()
   r.z -= 4.;
   r.y += 2.;
   r.w -= 4.;
-  gl_FragColor = gl_FragCoord.x <= r.x || gl_FragCoord.x >= (r.x + r.z) || 
-   gl_FragCoord.y <= r.y || gl_FragCoord.y >= (r.y + r.w) ? vec4(0.) : (vc * clamp(cshade, 0., 1.));
+  gl_FragColor.rgba = (vec4(color, 1.0) * clamp(cshade, 0., 1.));
+  gl_FragColor.a = gl_FragCoord.x <= r.x || gl_FragCoord.x >= (r.x + r.z) || 
+   gl_FragCoord.y <= r.y || gl_FragCoord.y >= (r.y + r.w) ? 0. : 1.;
 }
 #version 100
 precision mediump float;
@@ -75,9 +76,7 @@ precision mediump float;
 attribute vec3 vertexPosition;
 // This is not normal. This is dx, dy, and length of the line.
 attribute vec3 vertexNormal;
-attribute vec4 vertexColor;
 
-varying vec4 vc;
 varying vec2 normal;
 
 uniform vec2 offset;
@@ -89,7 +88,6 @@ void main(void)
 {
     // TODO: make this uniform.
     float thick = 0.09;
-    vc = vec4(normalize(vertexColor));
     vec2 tg = vertexNormal.xy;
     vec2 position = vertexPosition.xy;
 
