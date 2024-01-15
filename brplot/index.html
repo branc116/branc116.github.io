@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Brplot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body style="margin: 0">
+    <div id="box" style="display: flex">
+      <canvas id="can" width="800" height="600" style="background: black"></canvas>
+      <ul>
+        <li><label for="frequency">Frequency</label><input type="number" name="frequency" value="100" id="frequency"></li>
+        <li><label for="xmov">Delta X</label><input type="number" name="xmove" value="0.01" id="xmov"></li>
+        <li><label for="ppf">Points per Frame</label><input type="number" name="ppf" value="10" id="ppf"></li>
+      </ul>
+    </div>
+    <script type="module">
+      import { Brplot } from "https://cdn.jsdelivr.net/npm/brplot@0.0.4/index.js"
+
+      const b = new Brplot("can");
+      await b.initializeAsync();
+      const f = document.getElementById("frequency");
+      const xmov = document.getElementById("xmov");
+      const ppf = document.getElementById("ppf");
+      const box = document.getElementById("box");
+      let i = 0;
+
+      b.pushPoint(0, 1);
+      b.setOnNewFrame(() => {
+        handleResize();
+        for (let j = 0; j < ppf.value; ++j) {
+          const x = i * xmov.value;
+          const y = Math.sin(x * f.value / 6.14);
+          b.pushPoint(x, y);
+          ++i;
+        }
+      });
+      b.startDrawing();
+
+      const handleResize = () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        if (w > h + 100) {
+          b.resize(window.innerWidth - 250, window.innerHeight);
+          box.style.flexDirection = "row";
+        }
+        else {
+          b.resize(window.innerWidth, window.innerHeight - 300);
+          box.style.flexDirection = "column";
+        }
+      }
+    </script>
+  </body>
+</html>
